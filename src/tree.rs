@@ -17,7 +17,7 @@ fn handle_endpoint(list: &[Token]) -> Option<Result<Node, &Token>> {
             return Some(Err(&list[0]));
         }
     }
-    return None;
+    None
 }
 fn handle_brackets(list: &[Token]) -> Option<Result<Node, &Token>> {
     if list[0].str == "("
@@ -25,9 +25,7 @@ fn handle_brackets(list: &[Token]) -> Option<Result<Node, &Token>> {
         && list[0].layer == list.last().unwrap().layer
     {
         let cut = &list[1..list.len() - 1];
-        return Some(
-            build_exp_tree(&cut, list[0].layer).map(|node| Node::Brackets(Box::new(node))),
-        );
+        return Some(build_exp_tree(cut, list[0].layer).map(|node| Node::Brackets(Box::new(node))));
     }
     None
 }
@@ -93,10 +91,10 @@ pub fn build_exp_tree(list: &[Token], layer: i32) -> Result<Node, &Token> {
     for (index, element) in list.iter().enumerate().rev() {
         if element.layer == layer {
             if let Some((_, seen)) = operators.iter_mut().find(|(s, _)| s.contains(&element.str)) {
-                if let None = seen {
-                    if !(element.str == "-" && (index == 0 || list[index - 1].str.is_operator())) {
-                        *seen = Some(index);
-                    }
+                if let None = seen
+                    && !(element.str == "-" && (index == 0 || list[index - 1].str.is_operator()))
+                {
+                    *seen = Some(index);
                 }
             } else if element.str == "," {
                 return Err(element);
@@ -108,17 +106,17 @@ pub fn build_exp_tree(list: &[Token], layer: i32) -> Result<Node, &Token> {
     let first = &list[..index];
     let second = &list[(index + 1)..];
 
-    return Ok(Node::Operator {
+    Ok(Node::Operator {
         operator: list[index].str.to_string(),
         exp1: Box::new(build_exp_tree(first, layer)?),
         exp2: Box::new(build_exp_tree(second, layer)?),
-    });
+    })
 }
 
 pub fn get_expression(line: &String) -> Result<Node, String> {
     let list = line.slice_expr();
     if list.is_empty() {
-        return Err(format!("empty"));
+        return Err("empty".to_string());
     }
     match eval(&list) {
         Ok(_) => (),

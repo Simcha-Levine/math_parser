@@ -1,4 +1,4 @@
-use std::{format, vec};
+use std::format;
 
 pub enum Node {
     Brackets(Box<Node>),
@@ -19,7 +19,7 @@ pub enum Node {
 impl Node {
     #[allow(unused)]
     pub fn print_tree(&self) {
-        self.print_tree_rec(0, &vec![], "");
+        self.print_tree_rec(0, &[], "");
     }
 
     pub fn calculate(&self) -> Result<f32, String> {
@@ -58,7 +58,7 @@ impl Node {
                 };
                 Ok(result)
             }
-            Node::Variable(name) => return Err(format!("no variable named {name}")),
+            Node::Variable(name) => Err(format!("no variable named {name}")),
             Node::UniMinus(node) => Ok(-node.calculate()?),
             Node::Function { name, params } => {
                 let result = if name == "max" && params.len() == 2 {
@@ -75,6 +75,10 @@ impl Node {
                     params[0].calculate()?.tan()
                 } else if name == "mod" && params.len() == 2 {
                     params[0].calculate()? % params[1].calculate()?
+                } else if name == "pow" && params.len() == 2 {
+                    params[0].calculate()?.powf(params[1].calculate()?)
+                } else if name == "abs" && params.len() == 1 {
+                    params[0].calculate()?.abs()
                 } else {
                     return Err(format!("no function named {name}"));
                 };
@@ -171,7 +175,7 @@ impl Node {
         match self {
             Node::Brackets(node) => {
                 if nested {
-                    format!("{}", node.latex(true))
+                    node.latex(true)
                 } else {
                     format!("({})", node.latex(true))
                 }
@@ -229,7 +233,7 @@ impl Node {
                 if name.len() > 1 {
                     format!(r"\text{{{}}}", name)
                 } else {
-                    format!(r"{}", name)
+                    name.to_string()
                 }
             }
         }

@@ -23,7 +23,7 @@ fn is_same(a: &char, b: &char) -> bool {
     if (a.is_alphanumeric() || *a == '.') && (b.is_alphanumeric() || *b == '.') {
         return true;
     }
-    return false;
+    false
 }
 
 pub trait SliceExpression {
@@ -54,6 +54,6 @@ impl SliceExpression for str {
         if !word.is_empty() {
             list.push(MidToken::new(std::mem::take(&mut word), start))
         }
-        return list;
+        list
     }
 }

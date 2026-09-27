@@ -1,1 +1,1 @@
-((x * (b.y - a.y) / (b.x - a.x) + (a.y - a.x * (b.y - a.y) / (b.x - a.x))))
+((sqrt(pow(abs(3 - 2), 2) + pow(abs(4 - 7), 2))))

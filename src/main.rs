@@ -9,12 +9,18 @@ use std::println;
 mod eval;
 mod mid_token;
 mod node;
+mod run_file;
 mod test;
 mod token;
 mod token_types;
 mod tree;
 
 fn main() {
+    run_file::run("exp.txt");
+}
+
+#[allow(unused)]
+fn io_run() {
     let stdin = io::stdin();
 
     for line in stdin.lock().lines() {

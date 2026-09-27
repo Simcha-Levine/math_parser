@@ -3,7 +3,7 @@ use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 use std::println;
 
-fn run(path: &str) {
+pub fn run(path: &str) {
     for (index, line) in all_lines(path).unwrap().iter().enumerate() {
         match exe_expression(line) {
             Ok(num) => println!("{} = {num}", line),

@@ -24,10 +24,10 @@ fn eval_operators(list: &[MidToken]) -> Result<(), &MidToken> {
     }
 
     if list.last().unwrap().str.is_operator() {
-        return Err(&list.last().unwrap());
+        return Err(list.last().unwrap());
     }
 
-    return Ok(());
+    Ok(())
 }
 
 fn eval_operands(list: &[MidToken]) -> Result<(), &MidToken> {
@@ -59,7 +59,7 @@ fn eval_operands(list: &[MidToken]) -> Result<(), &MidToken> {
             return Err(&pair[0]);
         }
     }
-    return Ok(());
+    Ok(())
 }
 
 fn eval_brackets(list: &[MidToken]) -> Result<(), &MidToken> {
@@ -74,11 +74,7 @@ fn eval_brackets(list: &[MidToken]) -> Result<(), &MidToken> {
             brackets -= 1;
         }
     }
-    if brackets == 0 {
-        return Ok(());
-    } else {
-        Err(&list[0])
-    }
+    if brackets == 0 { Ok(()) } else { Err(&list[0]) }
 }
 
 pub fn eval(list: &[MidToken]) -> Result<(), &MidToken> {

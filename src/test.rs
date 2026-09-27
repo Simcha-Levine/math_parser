@@ -10,7 +10,7 @@ mod tests {
     fn exe_expression(line: &String) -> Result<f32, String> {
         let list = line.slice_expr();
         if list.is_empty() {
-            return Err(format!("empty"));
+            return Err("empty".to_string());
         }
         match eval(&list) {
             Ok(_) => (),
